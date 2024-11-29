@@ -4,6 +4,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Row } from './row/entity/row.entity';
 import { ConfigModule } from '@nestjs/config';
 import { WebhookModule } from './webhook/webhook.module';
+import { MailerModule } from './mailer/mailer.module';
+import { GoogleApiModule } from './google-api/google-api.module';
 
 @Module({
     imports: [
@@ -24,6 +26,8 @@ import { WebhookModule } from './webhook/webhook.module';
         }),
         RowModule,
         WebhookModule,
+        MailerModule,
+        GoogleApiModule,
   ],
   controllers: [],
   providers: [],

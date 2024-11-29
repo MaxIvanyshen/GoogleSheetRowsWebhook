@@ -4,6 +4,8 @@ import { Row } from './entity/row.entity';
 
 @Injectable()
 export class RowService {
+
+    private changes: Row[] = [];
     
     constructor( private repo: RowRepository ) {}
 
@@ -16,6 +18,19 @@ export class RowService {
     }
 
     async save(row: Row): Promise<void> {
+        this.changes.push(row);
         await this.repo.save(row);
+    }
+
+    getChanges(): Row[] {
+        return this.changes;
+    }
+
+    getNumberOfChanges(): number {
+        return this.changes.length;
+    }
+
+    clearChanges(): void {
+        this.changes = [];
     }
 }
