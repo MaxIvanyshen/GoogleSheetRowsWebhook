@@ -28,6 +28,7 @@
     "@nestjs/sequelize": "^10.0.1",
     "@nestjs/websockets": "^10.4.12",
     "@sendgrid/mail": "^8.1.4",
+    "google-auth-library": "^9.15.0",
     "googleapis": "^144.0.0",
     "mailersend": "^2.3.0",
     "pg": "^8.13.1",

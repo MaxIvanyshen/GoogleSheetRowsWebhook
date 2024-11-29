@@ -23,6 +23,12 @@ import { GoogleApiModule } from './google-api/google-api.module';
             models: [Row],
             autoLoadModels: true,
             synchronize: true,
+            dialectOptions: {
+                ssl: {
+                    require: true,
+                    rejectUnauthorized: false,
+                },
+            },
         }),
         RowModule,
         WebhookModule,

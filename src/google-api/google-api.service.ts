@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
-import * as path from 'path';
 import * as fs from 'fs';
 
 @Injectable()
@@ -11,32 +10,27 @@ export class GoogleApiService {
     this.initDriveClient();
   }
 
-  // Initialize Google Drive client with Service Account credentials
   private initDriveClient() {
     const keyFilePath = 'service_account_key.json';
-    
-    // Ensure the key file exists
+
     if (!fs.existsSync(keyFilePath)) {
       throw new Error('Service account key file not found');
     }
 
-    // Authenticate using the service account
     const auth = new google.auth.GoogleAuth({
       keyFile: keyFilePath,
-      scopes: ['https://www.googleapis.com/auth/drive'], // Scopes for Google Drive access
+      scopes: ['https://www.googleapis.com/auth/drive'],
     });
 
-    // Create the Google Drive client
     this.driveClient = google.drive({ version: 'v3', auth });
   }
 
-  // Fetch permissions for a specific Google Sheet (file)
   async getEmails(fileId: string): Promise<string []> {
 
     try {
       const res = await this.driveClient.permissions.list({
         fileId: fileId,
-        fields: 'permissions(emailAddress)', // Retrieve email addresses and roles of users with access
+        fields: 'permissions(emailAddress)',
       });
 
       const emails = await res.data.permissions;
