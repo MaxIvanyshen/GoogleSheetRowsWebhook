@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
 import * as fs from 'fs';
+import * as path from 'path';
+import * as process from 'process';
 
-@Injectable()
 export class GoogleApiService {
   private driveClient: any;
 
@@ -11,11 +11,16 @@ export class GoogleApiService {
   }
 
   private initDriveClient() {
-    const keyFilePath = 'service_account_key.json';
-
-    if (!fs.existsSync(keyFilePath)) {
-      throw new Error('Service account key file not found');
+    const base64Key = process.env.GOOGLE_APPLICATION_CREDENTIALS_BASE64;
+    
+    if (!base64Key) {
+      throw new Error('Service account key not found in environment variables');
     }
+
+    const decodedKey = Buffer.from(base64Key, 'base64').toString('utf8');
+    const keyFilePath = path.join(__dirname, 'service_account_key.json');
+
+    fs.writeFileSync(keyFilePath, decodedKey);
 
     const auth = new google.auth.GoogleAuth({
       keyFile: keyFilePath,
@@ -25,23 +30,18 @@ export class GoogleApiService {
     this.driveClient = google.drive({ version: 'v3', auth });
   }
 
-  async getEmails(fileId: string): Promise<string []> {
-
+  async getEmails(fileId: string): Promise<string[]> {
     try {
       const res = await this.driveClient.permissions.list({
         fileId: fileId,
         fields: 'permissions(emailAddress)',
       });
 
-      const emails = await res.data.permissions;
-      if(emails) {
-          let addresses = [];
-          for(let i = 0; i < emails.length; i++) {
-              addresses.push(emails[i].emailAddress);
-          }
-
-          return addresses;
+      const emails = res.data.permissions;
+      if (emails) {
+        return emails.map((permission: any) => permission.emailAddress);
       }
+
       return [];
     } catch (error) {
       console.error('Error retrieving permissions:', error);
