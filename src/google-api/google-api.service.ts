@@ -11,7 +11,7 @@ export class GoogleApiService {
   }
 
   private initDriveClient() {
-    const keyFilePath = '/etc/secrets/service_account_key.json';
+    const keyFilePath = 'service_account_key.json';
 
     if (!fs.existsSync(keyFilePath)) {
       throw new Error('Service account key file not found');
