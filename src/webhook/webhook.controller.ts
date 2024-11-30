@@ -27,7 +27,7 @@ export class WebhookController {
     @Post()
     async change(@Body() body: Row): Promise<void> {
         await this.service.triggerChange(body);
-        this.websocketGateway.sendMessageToClients('Hello from Webhook Controller!');
+        this.websocketGateway.sendMessageToClients(JSON.stringify(body));
     }
 }
 
