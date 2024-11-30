@@ -22,15 +22,15 @@ export class RowService {
         await this.repo.save(row);
     }
 
-    getChanges(): Row[] {
+    async getChanges(): Promise<Row[]> {
         return this.changes;
     }
 
-    getNumberOfChanges(): number {
+    async getNumberOfChanges(): Promise<number> {
         return this.changes.length;
     }
 
-    clearChanges(): void {
+    async clearChanges(): Promise<void> {
         this.changes = [];
     }
 }

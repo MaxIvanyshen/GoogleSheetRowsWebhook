@@ -20,10 +20,10 @@ export class WebhookService {
 
         await this.rowService.save(row);
 
-        if(this.rowService.getNumberOfChanges() === Number(process.env.CHANGES_UNTIL_EMAIL)) {
+        if(await this.rowService.getNumberOfChanges() === Number(process.env.CHANGES_UNTIL_EMAIL)) {
             const emails = await this.googleApiService.getEmails("1DGIlELSdAHtNPQv6av9JnVdxCAayy9Zx9LNoVMTEwAY");
             if(emails) {
-                await this.mailerService.sendEmails(emails, this.rowService.getChanges());
+                await this.mailerService.sendEmails(emails, await this.rowService.getChanges());
             }
             this.rowService.clearChanges();
         }
